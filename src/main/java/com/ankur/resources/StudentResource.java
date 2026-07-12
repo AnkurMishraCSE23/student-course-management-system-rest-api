@@ -2,12 +2,15 @@ package com.ankur.resources;
 
 import java.util.List;
 
+import com.ankur.dtos.StudentRequestDTO;
+import com.ankur.dtos.StudentResponseDTO;
 import com.ankur.exceptions.DatabaseOperationException;
 import com.ankur.exceptions.StudentNotFoundException;
+import com.ankur.exceptions.ValidationException;
+import com.ankur.mappers.StudentMapper;
 import com.ankur.models.StudentModel;
 import com.ankur.services.StudentService;
 
-import jakarta.validation.ValidationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -28,17 +31,20 @@ public class StudentResource
 	private final StudentService studentService = new StudentService();
 	
 	@POST
-	public Response registerStudent(StudentModel student)
+	public Response registerStudent(StudentRequestDTO studentRequestDTO)
 	{
 //		StudentModel student = new StudentModel(name, email);
+		
+		StudentModel student = StudentMapper.toModel(studentRequestDTO);
 		
 		try
 		{
 			StudentModel registeredStudent = studentService.registerStudent(student);
+			StudentResponseDTO studentResponseDTO = StudentMapper.toResponseDTO(registeredStudent);
 			
 			return Response
 					.status(Response.Status.CREATED)
-					.entity(registeredStudent)
+					.entity(studentResponseDTO)
 					.build();
 		}
 		catch (ValidationException e)
@@ -65,9 +71,10 @@ public class StudentResource
 		try
 		{
 			List<StudentModel> studentList = studentService.retrieveAllStudents();
+			List<StudentResponseDTO> studentResponseDTOList = StudentMapper.toResponseDTOList(studentList);
 			
 			return Response
-					.ok(studentList)
+					.ok(studentResponseDTOList)
 					.build();
 		}
 		catch (DatabaseOperationException e)
@@ -88,7 +95,7 @@ public class StudentResource
 			StudentModel student = studentService.retrieveStudentById(id);
 			
 			return Response
-					.ok(student)
+					.ok(StudentMapper.toResponseDTO(student))
 					.build();
 		}
 		catch (ValidationException e)
@@ -116,15 +123,15 @@ public class StudentResource
 	
 	@PUT
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateStudentById(@PathParam("id") int id, StudentModel student)
+	//@Consumes(MediaType.APPLICATION_JSON) not required as the class has;
+	public Response updateStudentById(@PathParam("id") int id, StudentRequestDTO studentRequestDTO)
 	{
 		try
 		{
-			StudentModel updatedStudent = studentService.updateStudentById(id, student);
+			StudentModel updatedStudent = studentService.updateStudentById(id, StudentMapper.toModel(studentRequestDTO));
 			
 			return Response
-					.ok(updatedStudent)
+					.ok(StudentMapper.toResponseDTO(updatedStudent))
 					.build();
 		}
 		catch (ValidationException e)

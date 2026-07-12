@@ -2,9 +2,11 @@ package com.ankur.resources;
 
 import java.util.List;
 
+import com.ankur.dtos.CourseRequestDTO;
 import com.ankur.exceptions.CourseNotFoundException;
 import com.ankur.exceptions.DatabaseOperationException;
 import com.ankur.exceptions.ValidationException;
+import com.ankur.mappers.CourseMapper;
 import com.ankur.models.CourseModel;
 import com.ankur.services.CourseService;
 
@@ -27,15 +29,15 @@ public class CourseResource
 	private final CourseService courseService = new CourseService();
 	
 	@POST
-	public Response createCourse(CourseModel course)
+	public Response createCourse(CourseRequestDTO courseRequestDTO)
 	{
 		try
 		{
-			CourseModel createdCourse = courseService.createCourse(course);
+			CourseModel createdCourse = courseService.createCourse(CourseMapper.toModel(courseRequestDTO));
 			
 			return Response
 					.status(Response.Status.CREATED)
-					.entity(createdCourse)
+					.entity(CourseMapper.toResponseDTO(createdCourse))
 					.build();
 		}
 		catch (ValidationException e)
@@ -62,7 +64,7 @@ public class CourseResource
 			List<CourseModel> courseList = courseService.getAllCourses();
 			
 			return Response
-					.ok(courseList)
+					.ok(CourseMapper.toResponseDTOList(courseList))
 					.build();
 		}
 		catch (DatabaseOperationException e)
@@ -83,7 +85,7 @@ public class CourseResource
 			CourseModel course = courseService.getCourseById(id);
 			
 			return Response
-					.ok(course)
+					.ok(CourseMapper.toResponseDTO(course))
 					.build();
 		}
 		catch (ValidationException e)
@@ -111,15 +113,15 @@ public class CourseResource
 	
 	@PUT
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateCourseById(@PathParam("id") int id, CourseModel course)
+//	@Consumes(MediaType.APPLICATION_JSON) redundant
+	public Response updateCourseById(@PathParam("id") int id, CourseRequestDTO courseRequestDTO)
 	{
 		try
 		{
-			CourseModel updatedCourse = courseService.updateCourseById(id, course);
+			CourseModel updatedCourse = courseService.updateCourseById(id, CourseMapper.toModel(courseRequestDTO));
 			
 			return Response
-					.ok(updatedCourse)
+					.ok(CourseMapper.toResponseDTO(updatedCourse))
 					.build();
 		}
 		catch (ValidationException e)

@@ -15,29 +15,35 @@ public class CourseService
 	
 	private void validateCourse(CourseModel course) throws ValidationException
 	{
-		if(course == null)
-        {
-            throw new ValidationException(
-                    "Course cannot be null");
-        }
+		if (course == null)
+	    {
+	        throw new ValidationException("Course cannot be null");
+	    }
 
-        if(course.getName() == null ||
-           course.getName().isBlank())
-        {
-            throw new ValidationException(
-                    "Name is required");
-        }
+	    if (course.getName() == null || course.getName().isBlank())
+	    {
+	        throw new ValidationException("Name is required");
+	    }
 
-        if(course.getDurationInMonths() <= 0)
-        {
-            throw new ValidationException(
-                    "Duration must be positive");
-        }
-        
-        if(course.getFees() < 0)
-        {
-        	throw new ValidationException("Fees can not be negative");
-        }
+	    if (course.getDurationInMonths() == null)
+	    {
+	        throw new ValidationException("Duration is required");
+	    }
+
+	    if (course.getDurationInMonths() <= 0)
+	    {
+	        throw new ValidationException("Duration must be positive");
+	    }
+
+	    if (course.getFees() == null)
+	    {
+	        throw new ValidationException("Fees is required");
+	    }
+
+	    if (course.getFees() < 0)
+	    {
+	        throw new ValidationException("Fees cannot be negative");
+	    }
 	}
 	
 	public CourseModel createCourse(CourseModel course) throws DatabaseOperationException, ValidationException

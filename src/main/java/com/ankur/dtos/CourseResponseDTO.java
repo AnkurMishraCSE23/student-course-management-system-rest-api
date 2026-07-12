@@ -1,16 +1,17 @@
-package com.ankur.models;
+package com.ankur.dtos;
 
-public class CourseModel
+public class CourseResponseDTO
 {
-	private Integer id; //= null not needed since by default null;
+	private Integer id;
 	private String name;
 	private Integer durationInMonths;
 	private Double fees;
 	
-	public CourseModel() {}
+	public CourseResponseDTO() {}
 	
-	public CourseModel(String name, Integer durationInMonths, Double fees)
+	public CourseResponseDTO(Integer id, String name, Integer durationInMonths, Double fees)
 	{
+		this.id = id;
 		this.name = name;
 		this.durationInMonths = durationInMonths;
 		this.fees = fees;

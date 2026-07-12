@@ -2,12 +2,14 @@ package com.ankur.resources;
 
 import java.util.List;
 
+import com.ankur.dtos.EnrollmentRequestDTO;
 import com.ankur.exceptions.CourseNotFoundException;
 import com.ankur.exceptions.DatabaseOperationException;
 import com.ankur.exceptions.DuplicateEnrollmentException;
 import com.ankur.exceptions.EnrollmentNotFoundException;
 import com.ankur.exceptions.StudentNotFoundException;
 import com.ankur.exceptions.ValidationException;
+import com.ankur.mappers.EnrollmentMapper;
 import com.ankur.models.EnrollmentModel;
 import com.ankur.services.EnrollmentService;
 
@@ -29,15 +31,15 @@ public class EnrollmentResource
 	private final EnrollmentService enrollmentService = new EnrollmentService();
 	
 	@POST
-	public Response createEnrollment(EnrollmentModel enrollment)
+	public Response createEnrollment(EnrollmentRequestDTO enrollmentRequestDTO)
 	{
 		try
 		{
-			EnrollmentModel createdEnrollment = enrollmentService.createEnrollment(enrollment);
+			EnrollmentModel createdEnrollment = enrollmentService.createEnrollment(EnrollmentMapper.toModel(enrollmentRequestDTO));
 			
 			return Response
 					.status(Response.Status.CREATED)
-					.entity(createdEnrollment)
+					.entity(EnrollmentMapper.toResponseDTO(createdEnrollment))
 					.build();
 		}
 		catch (ValidationException e)
@@ -85,7 +87,7 @@ public class EnrollmentResource
 			List<EnrollmentModel> enrollmentList = enrollmentService.getAllEnrollments();
 			
 			return Response
-					.ok(enrollmentList)
+					.ok(EnrollmentMapper.toResponseDTOList(enrollmentList))
 					.build();
 		}
 		catch (DatabaseOperationException e)
@@ -106,7 +108,7 @@ public class EnrollmentResource
 			List<EnrollmentModel> enrollmentList = enrollmentService.getEnrollmentsByStudentId(studentId);
 			
 			return Response
-					.ok(enrollmentList)
+					.ok(EnrollmentMapper.toResponseDTOList(enrollmentList))
 					.build();
 		}
 		catch (ValidationException e)
@@ -141,7 +143,7 @@ public class EnrollmentResource
 			List<EnrollmentModel> enrollmentList = enrollmentService.getEnrollmentsByCourseId(courseId);
 			
 			return Response
-					.ok(enrollmentList)
+					.ok(EnrollmentMapper.toResponseDTOList(enrollmentList))
 					.build();
 		}
 		catch (ValidationException e)
