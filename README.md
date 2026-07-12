@@ -1,32 +1,23 @@
 # Student Course Management System REST API
 
-A RESTful backend application built using **Java**, **JAX-RS (Jersey)**, **JDBC**, and **MySQL** that manages students, courses, and enrollments. The project follows a layered architecture consisting of Resource, Service, and Repository layers, with custom exception handling and relational database design.
+A RESTful backend application built using **Java**, **JAX-RS (Jersey)**, **JDBC**, **Maven**, and **MySQL** that manages students, courses, and enrollments.
+
+The project follows a layered architecture with dedicated **Resource**, **Service**, **Repository**, **DTO**, and **Mapper** layers, demonstrating clean separation of concerns, REST API design, validation, and exception handling.
 
 ---
 
 ## Features
 
-### Student Management
-- Create a student
-- Retrieve all students
-- Retrieve a student by ID
-- Update student details
-- Delete a student
-
-### Course Management
-- Create a course
-- Retrieve all courses
-- Retrieve a course by ID
-- Update course details
-- Delete a course
-
-### Enrollment Management
-- Enroll a student in a course
+- Student Management (CRUD)
+- Course Management (CRUD)
+- Enrollment Management
 - Prevent duplicate enrollments
-- Retrieve all enrollments
-- Retrieve enrollments by student
-- Retrieve enrollments by course
-- Delete an enrollment
+- Request and Response DTOs
+- Dedicated Mapper layer
+- Layered architecture
+- Input validation
+- Custom exception handling
+- Relational database design
 
 ---
 
@@ -39,6 +30,9 @@ A RESTful backend application built using **Java**, **JAX-RS (Jersey)**, **JDBC*
 - Maven
 - Apache Tomcat
 - Eclipse IDE
+- Git
+- GitHub
+- Postman
 
 ---
 
@@ -46,11 +40,17 @@ A RESTful backend application built using **Java**, **JAX-RS (Jersey)**, **JDBC*
 
 The project follows a layered architecture.
 
-```
+```text
 Client
    │
    ▼
+Request DTO
+   │
+   ▼
 Resource Layer
+   │
+   ▼
+Mapper Layer
    │
    ▼
 Service Layer
@@ -65,6 +65,8 @@ MySQL Database
 ### Layers
 
 - **Resource Layer** – Handles HTTP requests and responses.
+- **DTO Layer** – Defines request and response objects exchanged with clients.
+- **Mapper Layer** – Converts between DTOs and domain models.
 - **Service Layer** – Performs validation, business logic, and exception translation.
 - **Repository Layer** – Executes SQL operations using JDBC.
 - **Model Layer** – Represents domain entities.
@@ -73,16 +75,19 @@ MySQL Database
 
 ## Project Structure
 
-```
+```text
 src/main/java
 │
-├── com.ankur.config
-├── com.ankur.exceptions
-├── com.ankur.models
-├── com.ankur.repositories
-├── com.ankur.resources
-├── com.ankur.services
-└── com.ankur.utils
+└── com.ankur
+    ├── config
+    ├── dto
+    ├── exceptions
+    ├── mappers
+    ├── models
+    ├── repositories
+    ├── resources
+    ├── services
+    └── utils
 ```
 
 ---
@@ -181,6 +186,22 @@ Each exception is mapped to an appropriate HTTP status code.
 
 ---
 
+## Testing
+
+The API was tested using Postman.
+
+Verified functionality includes:
+
+- Student CRUD operations
+- Course CRUD operations
+- Enrollment CRUD operations
+- Duplicate enrollment prevention
+- Input validation
+- HTTP status code handling
+- Integration between all modules
+
+---
+
 ## How to Run
 
 1. Clone the repository.
@@ -195,17 +216,38 @@ Each exception is mapped to an appropriate HTTP status code.
 
 ## Future Improvements
 
-- DTOs (Data Transfer Objects)
 - Global Exception Handling using `ExceptionMapper`
 - Standardized API Response Objects
-- Logging
-- Unit Testing (JUnit)
+- Logging (SLF4J / Logback)
+- Unit Testing (JUnit + Mockito)
 - Integration Testing
 - Spring Boot migration
-- Swagger/OpenAPI documentation
+- Spring Data JPA / Hibernate
+- JWT Authentication
+- Swagger / OpenAPI documentation
+- Docker support
+
+---
+
+## Version History
+
+### v1.1.0
+
+- Introduced Request and Response DTOs
+- Added dedicated Mapper layer
+- Refactored REST resources to use DTOs instead of exposing domain models
+- Improved project architecture while preserving existing functionality
+
+### v1.0.0
+
+- Initial RESTful CRUD implementation
+- Student, Course, and Enrollment management
+- JDBC persistence
+- Layered architecture
+- Custom exception handling
 
 ---
 
 ## Author
 
-**Ankur**
+**Ankur Mishra**
